@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $old = $db->fetchOne("SELECT * FROM services WHERE service_id=?", 'i', $sid);
         $db->execute(
             "UPDATE services SET name=?,price=?,cancellation_hrs=?,penalty_pct=?,active=? WHERE service_id=?",
-            'sdidi', $name, $price, $cancel_hrs, $penalty, $active, $sid
+            'sdidii', $name, $price, $cancel_hrs, $penalty, $active, $sid
         );
         AuditLogger::log('UPDATE_SERVICE','services',$sid,$old,compact('name','price'));
         header("Location: services.php?success=Service+updated"); exit;
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $amount = $service['price'] * $qty;
         $db->insert(
             "INSERT INTO folio_charges (folio_id,service_id,description,amount,charge_type,charged_by) VALUES (?,?,?,?,'Service',?)",
-            'iisd i', $res['folio_id'], $service_id,
+            'iisdi', $res['folio_id'], $service_id,
             "{$service['name']} × {$qty}", $amount, Auth::id()
         );
         // Recalculate folio total

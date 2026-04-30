@@ -127,10 +127,12 @@ $status_info = [
           <label class="form-label">Update Status</label>
           <select name="status" id="modalStatusSelect" class="form-control">
             <option value="Ready">Ready</option>
+            <option value="Occupied">Occupied</option>
             <option value="Dirty">Dirty</option>
             <option value="InCleaning">In Cleaning</option>
             <option value="Inspecting">Inspecting</option>
             <option value="OutOfOrder">Out of Order</option>
+            <option value="Clean">Clean</option>
           </select>
         </div>
       </div>

@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "INSERT INTO reservations
                  (guest_id, room_id, check_in_date, check_out_date, adults, children, special_request, status, created_by)
                  VALUES (?,?,?,?,?,?,?,'Inquiry',?)",
-                'iiissiisi',
+                'iissiisi',
                 $guest_id, $room_id ?: null, $check_in, $check_out,
                 $adults, $children, $special, Auth::id()
             );
