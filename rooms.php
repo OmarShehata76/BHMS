@@ -85,7 +85,7 @@ $status_info = [
         <?php foreach ($room_list as $r):
           $si = $status_info[$r['status']] ?? ['class'=>'','label'=>$r['status'],'color'=>'var(--text-dim)'];
         ?>
-        <div class="room-cell <?= $si['class'] ?>"
+        <div class="room-cell <?= $si['class'] ?>" data-room-id="<?= $r['room_id'] ?>"
              onclick="openRoomModal(<?= $r['room_id'] ?>,'<?= $r['room_number'] ?>','<?= $r['status'] ?>','<?= htmlspecialchars(addslashes($r['type_name'])) ?>')">
           <span class="room-number"><?= $r['room_number'] ?></span>
           <div class="room-type"><?= htmlspecialchars($r['type_name']) ?></div>
@@ -111,7 +111,7 @@ $status_info = [
       <div class="modal-title" id="modalRoomTitle">Room</div>
       <button class="modal-close" onclick="document.getElementById('roomModal').classList.remove('show')">×</button>
     </div>
-    <form method="POST" id="roomForm">
+    <form id="roomForm">
       <input type="hidden" name="action" value="update_status">
       <input type="hidden" name="room_id" id="modalRoomId">
       <div class="modal-body">
@@ -174,6 +174,7 @@ $status_info = [
 </div>
 
 <div class="toast-container" id="toasts"></div>
+
 <script>
 function openRoomModal(id, number, status, type) {
   document.getElementById('modalRoomId').value = id;
@@ -183,7 +184,35 @@ function openRoomModal(id, number, status, type) {
   document.getElementById('modalStatusSelect').value = status;
   document.getElementById('roomModal').classList.add('show');
 }
-const p=new URLSearchParams(location.search);
-if(p.get('success')){const el=document.createElement('div');el.className='toast success';el.innerHTML='<span class="toast-icon">✓</span><span class="toast-msg">'+p.get('success')+'</span>';document.getElementById('toasts').appendChild(el);setTimeout(()=>el.remove(),4000)}
+
+const p = new URLSearchParams(location.search);
+
+if (p.get('success')) {
+    const el = document.createElement('div');
+    el.className = 'toast success';
+    el.innerHTML =
+      '<span class="toast-icon">✓</span><span class="toast-msg">' +
+      p.get('success') +
+      '</span>';
+
+    document.getElementById('toasts').appendChild(el);
+    setTimeout(() => el.remove(), 4000);
+}
+
+/* AJAX submit */
+document.getElementById('roomForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    let roomId = document.getElementById('modalRoomId').value;
+    let status = document.getElementById('modalStatusSelect').value;
+
+    RoomStatusAJAX.updateStatus(roomId, status, function(){
+        document.getElementById('roomModal').classList.remove('show');
+    });
+});
 </script>
-</body></html>
+
+<script src="js/ajax.js"></script>
+
+</body>
+</html>
